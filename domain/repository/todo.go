@@ -6,7 +6,8 @@ import (
 
 //TodoRepository is interface for infrastructure
 type TodoRepository interface {
-	Find(int) (*model.Todo, error)
+	Find(string) ([]*model.Todo, error)
+	FindAll() ([]*model.Todo, error)
 	Create(*model.Todo) (*model.Todo, error)
 	Update(*model.Todo) (*model.Todo, error)
 }
