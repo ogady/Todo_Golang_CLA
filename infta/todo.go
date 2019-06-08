@@ -10,33 +10,43 @@ type TodoRepository struct {
 }
 
 func (todoRepo *TodoRepository) FindAll() (todos []*model.Todo, err error) {
-	rows, err := todoRepo.Query("")
+	rows, err := todoRepo.Query("SELECT * FROM todos")
 	defer rows.Close()
 	if err != nil {
 		return
 	}
 	for rows.Next() {
-		var id int
-		var task string
-		var limitDate string
-		var status bool
-		if err := rows.Scan(&id, &task, &limitDate, &status); err != nil {
-			continue
-		}
 		todo := model.Todo{}
+
+		rows.Scan(&todo.ID, &todo.Task, &todo.LimitDate, &todo.Status)
+
 		todos = append(todos, &todo)
 	}
 	return
 }
 
-func (todoRepo *TodoRepository) Find(string) (todos []*model.Todo, err error) {
+func (todoRepo *TodoRepository) Find(word string) (todos []*model.Todo, err error) {
+	rows, err := todoRepo.Query("SELECT * FROM todos WHERE tasks IN ?", word)
+	defer rows.Close()
+	if err != nil {
+		return
+	}
+	for rows.Next() {
+		todo := model.Todo{}
+
+		rows.Scan(&todo.ID, &todo.Task, &todo.LimitDate, &todo.Status)
+
+		todos = append(todos, &todo)
+	}
 	return
 }
 
-func (todoRepo *TodoRepository) Create(*model.Todo) (todo *model.Todo, err error) {
-	return
+func (todoRepo *TodoRepository) Create(todo *model.Todo) (*model.Todo, error) {
+	_, err := todoRepo.Execute("INSERT INTO todos VALUES (?, ?, ?, ?) ", todo.ID, todo.Task, todo.LimitDate, todo.Status)
+	return todo, err
 }
 
-func (todoRepo *TodoRepository) Update(*model.Todo) (todo *model.Todo, err error) {
-	return
+func (todoRepo *TodoRepository) Update(todo *model.Todo) (*model.Todo, error) {
+	_, err := todoRepo.Execute("UPDARE todos SET task = ?,limitdate = ? ,status = ? WHERE id = ?", todo.Task, todo.LimitDate, todo.Status, todo.ID)
+	return todo, err
 }
