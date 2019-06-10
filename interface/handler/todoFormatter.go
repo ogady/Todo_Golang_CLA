@@ -8,11 +8,16 @@ import (
 	"github.com/labstack/echo"
 )
 
-type TodoFormatter struct {
+type todoFormatter struct {
 	todoUsecase usecase.TodoUsecase
 }
 
-func (formatter *TodoFormatter) View() echo.HandlerFunc {
+func NewTodoFormatter(todoUsecase usecase.TodoUsecase) todoFormatter {
+	todoFormatter := todoFormatter{todoUsecase: todoUsecase}
+	return todoFormatter
+}
+
+func (formatter *todoFormatter) View() echo.HandlerFunc {
 
 	return func(c echo.Context) error {
 		models, err := formatter.todoUsecase.View()
@@ -23,7 +28,7 @@ func (formatter *TodoFormatter) View() echo.HandlerFunc {
 	}
 
 }
-func (formatter *TodoFormatter) Search() echo.HandlerFunc {
+func (formatter *todoFormatter) Search() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		word := c.QueryParam("word")
 		models, err := formatter.todoUsecase.Search(word)
@@ -33,7 +38,7 @@ func (formatter *TodoFormatter) Search() echo.HandlerFunc {
 		return c.JSON(http.StatusOK, models)
 	}
 }
-func (formatter *TodoFormatter) Add() echo.HandlerFunc {
+func (formatter *todoFormatter) Add() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var todo model.Todo
 		c.Bind(&todo)
@@ -41,7 +46,7 @@ func (formatter *TodoFormatter) Add() echo.HandlerFunc {
 		return c.JSON(http.StatusOK, err)
 	}
 }
-func (formatter *TodoFormatter) Edit() echo.HandlerFunc {
+func (formatter *todoFormatter) Edit() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var todo model.Todo
 		c.Bind(&todo)

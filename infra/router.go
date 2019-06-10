@@ -6,13 +6,13 @@ import (
 	"github.com/labstack/echo"
 )
 
-func initRouting(e *echo.Echo) {
+func InitRouting(e *echo.Echo) {
 	todoFormatter := new(handler.TodoFormatter)
 	e.GET("/", todoFormatter.View())
 
 	e.GET("/:word", todoFormatter.Search())
 
-	e.POST("/todoCreate", todoFormatter.Add(echo.Context))
+	e.POST("/todoCreate", todoFormatter.Add())
 
 	e.POST("/todoEdit", todoFormatter.Edit())
 }

@@ -42,11 +42,11 @@ func (todoRepo *TodoRepository) Find(word string) (todos []*model.Todo, err erro
 }
 
 func (todoRepo *TodoRepository) Create(todo *model.Todo) (*model.Todo, error) {
-	_, err := todoRepo.Execute("INSERT INTO todos VALUES (?, ?, ?, ?) ", todo.ID, todo.Task, todo.LimitDate, todo.Status)
+	_, err := todoRepo.Execute("INSERT INTO todos (task,limitDate,status) VALUES (?, ?, ?) ", todo.Task, todo.LimitDate, todo.Status)
 	return todo, err
 }
 
 func (todoRepo *TodoRepository) Update(todo *model.Todo) (*model.Todo, error) {
-	_, err := todoRepo.Execute("UPDARE todos SET task = ?,limitdate = ? ,status = ? WHERE id = ?", todo.Task, todo.LimitDate, todo.Status, todo.ID)
+	_, err := todoRepo.Execute("UPDARE todos SET task = ?,limitDate = ? ,status = ? WHERE id = ?", todo.Task, todo.LimitDate, todo.Status, todo.ID)
 	return todo, err
 }
