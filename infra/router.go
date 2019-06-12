@@ -1,13 +1,11 @@
 package infra
 
 import (
-	"todo/interface/handler"
-
 	"github.com/labstack/echo"
 )
 
 func InitRouting(e *echo.Echo) {
-	todoFormatter := new(handler.TodoFormatter)
+	todoFormatter := InjectTodoFormatter()
 	e.GET("/", todoFormatter.View())
 
 	e.GET("/:word", todoFormatter.Search())

@@ -2,6 +2,7 @@ package infra
 
 import (
 	"todo/domain/model"
+	"todo/domain/repository"
 	"todo/interface/database"
 )
 
@@ -9,6 +10,10 @@ type TodoRepository struct {
 	database.SqlHandler
 }
 
+func NewTodoRepository(db database.SqlHandler) repository.TodoRepository {
+	todoRepository := TodoRepository{db}
+	return &todoRepository
+}
 func (todoRepo *TodoRepository) FindAll() (todos []*model.Todo, err error) {
 	rows, err := todoRepo.Query("SELECT * FROM todos")
 	defer rows.Close()
