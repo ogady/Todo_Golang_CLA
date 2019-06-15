@@ -3,21 +3,21 @@ package infra
 import (
 	"todo/domain/model"
 	"todo/domain/repository"
-	"todo/interface/database"
 )
 
 type TodoRepository struct {
-	database.SqlHandler
+	SqlHandler
 }
 
-func NewTodoRepository(sqlHandler database.SqlHandler) repository.TodoRepository {
+func NewTodoRepository(sqlHandler SqlHandler) repository.TodoRepository {
 	todoRepository := TodoRepository{sqlHandler}
 	return &todoRepository
 }
 func (todoRepo *TodoRepository) FindAll() (todos []*model.Todo, err error) {
-	rows, err := todoRepo.Query("SELECT * FROM todos")
+	rows, err := todoRepo.SqlHandler.Conn.Query("SELECT * FROM todos")
 	defer rows.Close()
 	if err != nil {
+
 		return
 	}
 	for rows.Next() {
@@ -31,7 +31,7 @@ func (todoRepo *TodoRepository) FindAll() (todos []*model.Todo, err error) {
 }
 
 func (todoRepo *TodoRepository) Find(word string) (todos []*model.Todo, err error) {
-	rows, err := todoRepo.Query("SELECT * FROM todos WHERE tasks IN ?", word)
+	rows, err := todoRepo.SqlHandler.Conn.Query("SELECT * FROM todos WHERE tasks IN ?", word)
 	defer rows.Close()
 	if err != nil {
 		return
@@ -47,11 +47,11 @@ func (todoRepo *TodoRepository) Find(word string) (todos []*model.Todo, err erro
 }
 
 func (todoRepo *TodoRepository) Create(todo *model.Todo) (*model.Todo, error) {
-	_, err := todoRepo.Execute("INSERT INTO todos (task,limitDate,status) VALUES (?, ?, ?) ", todo.Task, todo.LimitDate, todo.Status)
+	_, err := todoRepo.SqlHandler.Conn.Exec("INSERT INTO todos (task,limitDate,status) VALUES (?, ?, ?) ", todo.Task, todo.LimitDate, todo.Status)
 	return todo, err
 }
 
 func (todoRepo *TodoRepository) Update(todo *model.Todo) (*model.Todo, error) {
-	_, err := todoRepo.Execute("UPDARE todos SET task = ?,limitDate = ? ,status = ? WHERE id = ?", todo.Task, todo.LimitDate, todo.Status, todo.ID)
+	_, err := todoRepo.SqlHandler.Conn.Exec("UPDARE todos SET task = ?,limitDate = ? ,status = ? WHERE id = ?", todo.Task, todo.LimitDate, todo.Status, todo.ID)
 	return todo, err
 }
