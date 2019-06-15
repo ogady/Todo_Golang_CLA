@@ -8,7 +8,7 @@ func InitRouting(e *echo.Echo) {
 	todoFormatter := InjectTodoFormatter()
 	e.GET("/", todoFormatter.View())
 
-	e.GET("/:word", todoFormatter.Search())
+	e.GET("/search", todoFormatter.Search())
 
 	e.POST("/todoCreate", todoFormatter.Add())
 

@@ -1,6 +1,7 @@
 package infra
 
 import (
+	"fmt"
 	"todo/domain/model"
 	"todo/domain/repository"
 )
@@ -17,7 +18,7 @@ func (todoRepo *TodoRepository) FindAll() (todos []*model.Todo, err error) {
 	rows, err := todoRepo.SqlHandler.Conn.Query("SELECT * FROM todos")
 	defer rows.Close()
 	if err != nil {
-
+		fmt.Print(err)
 		return
 	}
 	for rows.Next() {
@@ -31,9 +32,10 @@ func (todoRepo *TodoRepository) FindAll() (todos []*model.Todo, err error) {
 }
 
 func (todoRepo *TodoRepository) Find(word string) (todos []*model.Todo, err error) {
-	rows, err := todoRepo.SqlHandler.Conn.Query("SELECT * FROM todos WHERE tasks IN ?", word)
+	rows, err := todoRepo.SqlHandler.Conn.Query("SELECT * FROM todos WHERE task LIKE ?", "%"+word+"%")
 	defer rows.Close()
 	if err != nil {
+		fmt.Print(err)
 		return
 	}
 	for rows.Next() {
@@ -52,6 +54,6 @@ func (todoRepo *TodoRepository) Create(todo *model.Todo) (*model.Todo, error) {
 }
 
 func (todoRepo *TodoRepository) Update(todo *model.Todo) (*model.Todo, error) {
-	_, err := todoRepo.SqlHandler.Conn.Exec("UPDARE todos SET task = ?,limitDate = ? ,status = ? WHERE id = ?", todo.Task, todo.LimitDate, todo.Status, todo.ID)
+	_, err := todoRepo.SqlHandler.Conn.Exec("UPDATE todos SET task = ?,limitDate = ? ,status = ? WHERE id = ?", todo.Task, todo.LimitDate, todo.Status, todo.ID)
 	return todo, err
 }
