@@ -5,12 +5,12 @@ import (
 )
 
 func InitRouting(e *echo.Echo) {
-	todoFormatter := InjectTodoFormatter()
-	e.GET("/", todoFormatter.View())
+	todoHandler := InjectTodoHandler()
+	e.GET("/", todoHandler.View())
 
-	e.GET("/search", todoFormatter.Search())
+	e.GET("/search", todoHandler.Search())
 
-	e.POST("/todoCreate", todoFormatter.Add())
+	e.POST("/todoCreate", todoHandler.Add())
 
-	e.POST("/todoEdit", todoFormatter.Edit())
+	e.POST("/todoEdit", todoHandler.Edit())
 }

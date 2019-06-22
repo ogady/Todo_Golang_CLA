@@ -8,19 +8,19 @@ import (
 	"github.com/labstack/echo"
 )
 
-type TodoFormatter struct {
+type TodoHandler struct {
 	todoUsecase usecase.TodoUsecase
 }
 
-func NewTodoFormatter(todoUsecase usecase.TodoUsecase) TodoFormatter {
-	todoFormatter := TodoFormatter{todoUsecase: todoUsecase}
-	return todoFormatter
+func NewTodoHandler(todoUsecase usecase.TodoUsecase) TodoHandler {
+	todoHandler := TodoHandler{todoUsecase: todoUsecase}
+	return todoHandler
 }
 
-func (formatter *TodoFormatter) View() echo.HandlerFunc {
+func (handler *TodoHandler) View() echo.HandlerFunc {
 
 	return func(c echo.Context) error {
-		models, err := formatter.todoUsecase.View()
+		models, err := handler.todoUsecase.View()
 		if err != nil {
 			return c.JSON(http.StatusBadRequest, models)
 		}
@@ -28,29 +28,29 @@ func (formatter *TodoFormatter) View() echo.HandlerFunc {
 	}
 
 }
-func (formatter *TodoFormatter) Search() echo.HandlerFunc {
+func (handler *TodoHandler) Search() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		word := c.QueryParam("word")
-		models, err := formatter.todoUsecase.Search(word)
+		models, err := handler.todoUsecase.Search(word)
 		if err != nil {
 			return c.JSON(http.StatusBadRequest, models)
 		}
 		return c.JSON(http.StatusOK, models)
 	}
 }
-func (formatter *TodoFormatter) Add() echo.HandlerFunc {
+func (handler *TodoHandler) Add() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var todo model.Todo
 		c.Bind(&todo)
-		err := formatter.todoUsecase.Add(&todo)
+		err := handler.todoUsecase.Add(&todo)
 		return c.JSON(http.StatusOK, err)
 	}
 }
-func (formatter *TodoFormatter) Edit() echo.HandlerFunc {
+func (handler *TodoHandler) Edit() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var todo model.Todo
 		c.Bind(&todo)
-		err := formatter.todoUsecase.Edit(&todo)
+		err := handler.todoUsecase.Edit(&todo)
 		return c.JSON(http.StatusOK, err)
 	}
 }

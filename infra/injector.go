@@ -22,6 +22,6 @@ func InjectTodoUsecase() usecase.TodoUsecase {
 	return usecase.NewTodoUsecase(TodoRepo)
 }
 
-func InjectTodoFormatter() handler.TodoFormatter {
-	return handler.NewTodoFormatter(InjectTodoUsecase())
+func InjectTodoHandler() handler.TodoHandler {
+	return handler.NewTodoHandler(InjectTodoUsecase())
 }
