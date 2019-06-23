@@ -1,11 +1,13 @@
-package infra
+package controller
 
 import (
+	"todo/injector"
+
 	"github.com/labstack/echo"
 )
 
 func InitRouting(e *echo.Echo) {
-	todoHandler := InjectTodoHandler()
+	todoHandler := injector.InjectTodoHandler()
 	e.GET("/", todoHandler.View())
 
 	e.GET("/search", todoHandler.Search())

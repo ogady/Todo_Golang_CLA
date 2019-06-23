@@ -1,20 +1,21 @@
-package infra
+package injector
 
 import (
 	"todo/domain/repository"
+	"todo/infra/database"
 
 	"todo/interface/handler"
 	"todo/usecase"
 )
 
-func InjectDB() SqlHandler {
-	sqlhandler := NewSqlHandler()
+func InjectDB() database.SqlHandler {
+	sqlhandler := database.NewSqlHandler()
 	return *sqlhandler
 }
 
 func InjectTodoRepository() repository.TodoRepository {
 	sqlHandler := InjectDB()
-	return NewTodoRepository(sqlHandler)
+	return database.NewTodoRepository(sqlHandler)
 }
 
 func InjectTodoUsecase() usecase.TodoUsecase {

@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"todo/infra"
+	"todo/infra/controller"
 
 	"github.com/labstack/echo"
 )
@@ -10,6 +10,6 @@ import (
 func main() {
 	fmt.Println("sever start")
 	e := echo.New()
-	infra.InitRouting(e)
+	controller.InitRouting(e)
 	e.Logger.Fatal(e.Start(":8080"))
 }
