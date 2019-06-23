@@ -1,13 +1,13 @@
 package controller
 
 import (
-	"todo/injector"
+	"todo/interface/handler"
 
 	"github.com/labstack/echo"
 )
 
-func InitRouting(e *echo.Echo) {
-	todoHandler := injector.InjectTodoHandler()
+func InitRouting(e *echo.Echo, todoHandler handler.TodoHandler) {
+
 	e.GET("/", todoHandler.View())
 
 	e.GET("/search", todoHandler.Search())
