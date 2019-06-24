@@ -1,12 +1,10 @@
-package controller
+package handler
 
 import (
-	"todo/interface/handler"
-
 	"github.com/labstack/echo"
 )
 
-func InitRouting(e *echo.Echo, todoHandler handler.TodoHandler) {
+func InitRouting(e *echo.Echo, todoHandler TodoHandler) {
 
 	e.GET("/", todoHandler.View())
 
