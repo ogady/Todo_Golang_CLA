@@ -28,7 +28,7 @@ type todoUsecase struct {
 NewTodoUsecase is constructor for init
 TodoUsecase interface を返却している
 go言語において呼び出し元にinterfaceのみを公開することで実装の詳細を隠ぺいすると、gomockを使ったテストがやり易くなる。
-NewTodoUsecase 関数で todoUsecase のメモリを確保し、interfaceである TodoUsecase 型として利用者に公開します。
+NewTodoUsecase 関数で todoUsecase(非公開) のメモリを確保し、interfaceである TodoUsecase（公開） 型として利用者に公開します。
 */
 func NewTodoUsecase(todoRepo repository.TodoRepository) TodoUsecase {
 	todoUsecase := todoUsecase{todoRepo: todoRepo}
